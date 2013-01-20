@@ -6,7 +6,18 @@ Created on 19.01.2013
 
 #!/usr/bin/python2
 
+import sys
+import os
+
 from gi.repository import Nautilus, GObject, Gtk
+
+#
+
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/nautilus-advacl")
+
+import nautilusadvacllib
+
+print sys.path
 
 builder = Gtk.Builder()
 #builder.add_objects_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-prop.glade", ["boxMain"])
@@ -50,5 +61,8 @@ tvPermissions.append_column(column_toggle)
 renderer_toggle2 = Gtk.CellRendererToggle()
 column_toggle2 = Gtk.TreeViewColumn("Verweigern", renderer_toggle2, active=2)
 tvPermissions.append_column(column_toggle2)
+
+lib = nautilusadvacllib.AdvACLLibrary()
+lib.get_permissions("/home/rene/tmp/test")
 
 Gtk.main()

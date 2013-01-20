@@ -31,8 +31,10 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         self.builder = Gtk.Builder()
         self.builder.add_objects_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-prop.glade", ["boxMain"])
-        self.bbox = builder.get_object("boxMain")
+        self.bbox = self.builder.get_object("boxMain")
         self.bbox.show()
+        
+        self.init_widgets()
         
         return Nautilus.PropertyPage(name="Advanced ACL",
                                      label=self.property_label, 
@@ -43,4 +45,25 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         tvObjects = self.builder.get_object("tvObjects")
         tvPermissions = self.builder.get_object("tvPermissions")
         
+    def init_widgets(self):
+        tvObjects = self.builder.get_object("tvObjects")
+        tvPermissions = self.builder.get_object("tvPermissions")
         
+        # tvObjects
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(_("Object"), renderer, text=0)
+        tvObjects.append_column(column)
+        
+        # tvPermissions
+        renderer2 = Gtk.CellRendererText()
+        column2 = Gtk.TreeViewColumn(_("Object"), renderer, text=0)
+        column2.set_min_width(250)
+        tvPermissions.append_column(column2)
+        
+        renderer_toggle = Gtk.CellRendererToggle()
+        column_toggle = Gtk.TreeViewColumn(_("Grant"), renderer_toggle, active=1)
+        tvPermissions.append_column(column_toggle)
+        
+        renderer_toggle2 = Gtk.CellRendererToggle()
+        column_toggle2 = Gtk.TreeViewColumn(_("Deny"), renderer_toggle2, active=2)
+        tvPermissions.append_column(column_toggle2)

@@ -59,13 +59,13 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         permStore = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         
         for permObj in permList:
-            permStore.append([permObj, permObj.object])
+            permStore.append([permObj, permObj.object + " (" + permObj.realm + ")"])
             
         tvObjects.set_model(permStore)
         
     def init_widgets(self):
         self.tvObjects = self.builder.get_object("tvObjects")
-        tvPermissions = self.builder.get_object("tvPermissions")
+        self.tvPermissions = self.builder.get_object("tvPermissions")
         
         # tvObjects
         renderer = Gtk.CellRendererText()
@@ -79,25 +79,25 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         # tvPermissions
         renderer2 = Gtk.CellRendererText()
         column2 = Gtk.TreeViewColumn(_("Object"), renderer, text=0)
-        column2.set_min_width(250)
-        tvPermissions.append_column(column2)
+        column2.set_min_width(350)
+        self.tvPermissions.append_column(column2)
         
         renderer_toggle = Gtk.CellRendererToggle()
         renderer_toggle.set_activatable(True)
         column_toggle = Gtk.TreeViewColumn(_("Grant"), renderer_toggle, active=1)
         column_toggle.set_min_width(100)
-        tvPermissions.append_column(column_toggle)
+        self.tvPermissions.append_column(column_toggle)
         
-        renderer_toggle2 = Gtk.CellRendererToggle()
-        column_toggle2 = Gtk.TreeViewColumn(_("Deny"), renderer_toggle2, active=2)
-        tvPermissions.append_column(column_toggle2)
+        #renderer_toggle2 = Gtk.CellRendererToggle()
+        #column_toggle2 = Gtk.TreeViewColumn(_("Deny"), renderer_toggle2, active=2)
+        #self.tvPermissions.append_column(column_toggle2)
         
         # tvPermissions data
-        store = Gtk.ListStore(str, bool, bool)
-        store.append([_("Read"), False, False])
-        store.append([_("Write"), False, False])
-        store.append([_("Execute"), False, False])
-        tvPermissions.set_model(store)
+        store = Gtk.ListStore(str, bool)
+        store.append([_("Read"), False])
+        store.append([_("Write"), False])
+        store.append([_("Execute"), False])
+        self.tvPermissions.set_model(store)
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"
@@ -108,3 +108,6 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         model = self.tvObjects.get_model()
         print "selected", model.get_value(iter, 1)
+        
+    def tvPermissions_set_permissions(self, ):
+        pass

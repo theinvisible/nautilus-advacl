@@ -24,6 +24,7 @@ builder = Gtk.Builder()
 builder.add_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-prop.glade")
 #bbox = builder.get_objects()
 bbox = builder.get_object("window1")
+bbox.connect("destroy", Gtk.main_quit)
 print bbox
 bbox.show()
 

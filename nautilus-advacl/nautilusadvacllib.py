@@ -39,7 +39,7 @@ class AdvACLLibrary:
         self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):([rwx\-]{3})$")
     
     def get_permissions(self, filename):
-        perm = {}
+        perm = []
         
         if not os.path.exists(filename):
             return perm
@@ -57,15 +57,6 @@ class AdvACLLibrary:
                 if not res_object:
                     continue
                 
-                if not res_realm in perm:
-                    perm[res_realm] = {}
-                
-                if res_realm == "user":
-                    perm[res_realm][res_object] = {}
-                    perm[res_realm][res_object]["perm"] = AdcACLPermission(res_perm)
-                    
-                elif res_realm == "group":
-                    perm[res_realm][res_object] = {}
-                    perm[res_realm][res_object]["perm"] = AdcACLPermission(res_perm)
+                perm.append(AdcACLObject(res_realm, res_object, res_perm))
                     
         return perm

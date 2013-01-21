@@ -9,6 +9,30 @@ import os
 import re
 import subprocess
 
+class AdcACLPermission:
+    def __init__(self, perm):
+        self.read = False
+        self.write = False
+        self.execute = False
+        
+        self.convert(perm)
+        
+    def convert(self, perm):
+        if perm[0] == "r":
+            self.read = True
+            
+        if perm[1] == "w":
+            self.write = True
+            
+        if perm[2] == "x":
+            self.execute = True
+            
+class AdcACLObject:
+    def __init__(self, a_realm, a_object, a_perm):
+        self.realm = a_realm
+        self.object = a_object
+        self.perm = AdcACLPermission(a_perm)
+
 class AdvACLLibrary:
     def __init__(self):
         #self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):{3}$")
@@ -21,7 +45,6 @@ class AdvACLLibrary:
             return perm
         
         output = subprocess.check_output(["getfacl", filename])
-        print output
         out_lines = output.split("\n")
         
         for line in out_lines:
@@ -31,14 +54,18 @@ class AdvACLLibrary:
                 res_object = m_result.group(2)
                 res_perm = m_result.group(3)
                 
-                print line
+                if not res_object:
+                    continue
+                
+                if not res_realm in perm:
+                    perm[res_realm] = {}
                 
                 if res_realm == "user":
-                    if not res_realm in perm:
-                        perm[res_realm] = {}
-                        
                     perm[res_realm][res_object] = {}
-                    perm[res_realm][res_object]["perm"] = res_perm
-                    pass
+                    perm[res_realm][res_object]["perm"] = AdcACLPermission(res_perm)
                     
-        print perm
+                elif res_realm == "group":
+                    perm[res_realm][res_object] = {}
+                    perm[res_realm][res_object]["perm"] = AdcACLPermission(res_perm)
+                    
+        return perm

@@ -29,9 +29,9 @@ bbox.show()
 
 # Treeview
 store = Gtk.ListStore(str)
-store.append(["test1"])
-store.append(["test2"])
-store.append(["test3"])
+#store.append(["test1"])
+#store.append(["test2"])
+#store.append(["test3"])
 
 tvObjects = builder.get_object("tvObjects")
 tvObjects.set_model(store)
@@ -42,9 +42,9 @@ tvObjects.append_column(column)
 
 # Treeview2
 store2 = Gtk.ListStore(str, bool, bool)
-store2.append(["Lesen", False, True])
-store2.append(["Schreiben", True, False])
-store2.append(["Ausfuehren", False, True])
+#store2.append(["Lesen", False, True])
+#store2.append(["Schreiben", True, False])
+#store2.append(["Ausfuehren", False, True])
 
 tvPermissions = builder.get_object("tvPermissions")
 tvPermissions.set_model(store2)

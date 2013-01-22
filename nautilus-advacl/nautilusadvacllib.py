@@ -14,6 +14,7 @@ class AdcACLPermission:
         self.read = False
         self.write = False
         self.execute = False
+        self.changed = False
         
         self.convert(perm)
         
@@ -26,6 +27,25 @@ class AdcACLPermission:
             
         if perm[2] == "x":
             self.execute = True
+            
+    def setPerm(self, attr, state):
+        self.changed = True
+        
+        if attr == "r":
+            self.read = state
+        elif attr == "w":
+            self.write = state
+        elif attr == "x":
+            self.execute = state
+            
+    def format_as_string(self):
+        strPerm = ""
+        
+        strPerm += "r" if self.read else "-"
+        strPerm += "w" if self.write else "-"
+        strPerm += "x" if self.execute else "-"
+        
+        return strPerm
             
 class AdcACLObject:
     def __init__(self, a_realm, a_object, a_perm):
@@ -60,3 +80,17 @@ class AdvACLLibrary:
                 perm.append(AdcACLObject(res_realm, res_object, res_perm))
                     
         return perm
+    
+    def set_permissions(self, objAdcACL, filename):
+        strPerm = ""
+        
+        strPerm += objAdcACL.realm + ":"
+        strPerm += objAdcACL.object + ":"
+        strPerm += objAdcACL.perm.format_as_string() + " "
+        
+        print strPerm
+        
+        try:
+            subprocess.check_output(["setfacl", "-m", strPerm, filename])
+        except subprocess.CalledProcessError as e:
+            print "Error occured while executing setfacl. Message: {0}".format(e.output)

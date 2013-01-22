@@ -188,7 +188,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <child>
-                          <object class="GtkButton" id="button3">
+                          <object class="GtkButton" id="btnPermApply">
                             <property name="label" translatable="yes" comments="Apply permissions">Apply</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>

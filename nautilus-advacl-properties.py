@@ -54,6 +54,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         # We load the acls from file and update the treeview
         tvObjects = self.builder.get_object("tvObjects")
         tvPermissions = self.builder.get_object("tvPermissions")
+        tvObjects.set_model(None)
         
         permList = self.advacllibrary.get_permissions(self.filename)
         permStore = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
@@ -66,6 +67,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def init_widgets(self):
         self.tvObjects = self.builder.get_object("tvObjects")
         self.tvPermissions = self.builder.get_object("tvPermissions")
+        self.btnPermApply = self.builder.get_object("btnPermApply")
         
         # tvObjects
         renderer = Gtk.CellRendererText()
@@ -78,13 +80,13 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # tvPermissions
         renderer2 = Gtk.CellRendererText()
-        column2 = Gtk.TreeViewColumn(_("Object"), renderer, text=0)
+        column2 = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
         column2.set_min_width(350)
         self.tvPermissions.append_column(column2)
         
         renderer_toggle = Gtk.CellRendererToggle()
-        renderer_toggle.set_activatable(True)
-        column_toggle = Gtk.TreeViewColumn(_("Grant"), renderer_toggle, active=1)
+        renderer_toggle.connect("toggled", self.tvPermissions_toggled)
+        column_toggle = Gtk.TreeViewColumn(_("Grant"), renderer_toggle, active=2)
         column_toggle.set_min_width(100)
         self.tvPermissions.append_column(column_toggle)
         
@@ -93,11 +95,14 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         #self.tvPermissions.append_column(column_toggle2)
         
         # tvPermissions data
-        store = Gtk.ListStore(str, bool)
-        store.append([_("Read"), False])
-        store.append([_("Write"), False])
-        store.append([_("Execute"), False])
+        store = Gtk.ListStore(str, str, bool)
+        store.append(["r", _("Read"), False])
+        store.append(["w", _("Write"), False])
+        store.append(["x", _("Execute"), False])
         self.tvPermissions.set_model(store)
+        
+        # btnPermApply
+        self.btnPermApply.connect("clicked", self.btnPermApply_clicked)
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"
@@ -107,7 +112,43 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
             return
         
         model = self.tvObjects.get_model()
-        print "selected", model.get_value(iter, 1)
+        objACL = model.get_value(iter, 0)
+        #print "selected", model.get_value(iter, 1)
+        self.tvPermissions_set_permission(objACL.perm)
         
-    def tvPermissions_set_permissions(self, ):
-        pass
+    def tvPermissions_set_permission(self, objPerm):
+        model = self.tvPermissions.get_model()
+        
+        model[0][2] = objPerm.read
+        model[1][2] = objPerm.write
+        model[2][2] = objPerm.execute
+        
+    def tvPermissions_toggled(self, widget, path):
+        model = self.tvPermissions.get_model()
+        iter = model.get_iter(path)
+        attr = model.get_value(iter, 0)
+        state = model.get_value(iter, 2)
+        
+        selection = self.tvObjects.get_selection()
+        tv, iterObjects = selection.get_selected()
+        objectsModel = self.tvObjects.get_model()
+        objACL = objectsModel.get_value(iterObjects, 0)
+        
+        print objACL.perm.format_as_string()
+        
+        if state == True:
+            model.set_value(iter, 2, False)
+            objACL.perm.setPerm(attr, False)
+        elif state == False:
+            model.set_value(iter, 2, True)
+            objACL.perm.setPerm(attr, True)
+            
+    def btnPermApply_clicked(self, button):
+        objectsModel = self.tvObjects.get_model()
+        
+        # We check now if there are any changed settings
+        for aclObj in objectsModel:
+            objACL = aclObj[0]
+            if objACL.perm.changed == True:
+                print objACL.object
+                self.advacllibrary.set_permissions(objACL, self.filename)

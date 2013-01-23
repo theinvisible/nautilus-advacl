@@ -94,3 +94,18 @@ class AdvACLLibrary:
             subprocess.check_output(["setfacl", "-m", strPerm, filename])
         except subprocess.CalledProcessError as e:
             print "Error occured while executing setfacl. Message: {0}".format(e.output)
+            
+    def remove_acl(self, objAdcACL, filename):
+        strRemove = ""
+        
+        strRemove += objAdcACL.realm + ":"
+        strRemove += objAdcACL.object
+        
+        print strRemove
+        
+        try:
+            subprocess.check_output(["setfacl", "-x", strRemove, filename])
+            return True
+        except subprocess.CalledProcessError as e:
+            print "Error occured while executing setfacl. Message: {0}".format(e.output)
+            return False

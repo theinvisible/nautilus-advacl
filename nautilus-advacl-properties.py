@@ -68,6 +68,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.tvObjects = self.builder.get_object("tvObjects")
         self.tvPermissions = self.builder.get_object("tvPermissions")
         self.btnPermApply = self.builder.get_object("btnPermApply")
+        self.btnObjRemove = self.builder.get_object("btnObjRemove")
         
         # tvObjects
         renderer = Gtk.CellRendererText()
@@ -103,6 +104,9 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # btnPermApply
         self.btnPermApply.connect("clicked", self.btnPermApply_clicked)
+        
+        # btnObjRemove
+        self.btnObjRemove.connect("clicked", self.btnObjRemove_clicked)
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"
@@ -152,3 +156,14 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
             if objACL.perm.changed == True:
                 print objACL.object
                 self.advacllibrary.set_permissions(objACL, self.filename)
+                
+    def btnObjRemove_clicked(self, button):
+        objectsModel = self.tvObjects.get_model()
+        selection = self.tvObjects.get_selection()
+        tv, iterObjects = selection.get_selected()
+        objACL = objectsModel.get_value(iterObjects, 0)
+        
+        # We remove now the selected entry
+        print "removing", objACL.object
+        if self.advacllibrary.remove_acl(objACL, self.filename):
+            objectsModel.remove(iterObjects)

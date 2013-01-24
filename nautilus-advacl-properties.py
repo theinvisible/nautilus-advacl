@@ -13,7 +13,8 @@ import urllib
 from gi.repository import Nautilus, GObject, Gtk
 from locale import gettext as _
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/nautilus-advacl")
+WORK_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(WORK_DIR + "/nautilus-advacl")
 
 import nautilusadvacllib as advacllib
 
@@ -39,7 +40,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.property_label.show()   
         
         self.builder = Gtk.Builder()
-        self.builder.add_objects_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-prop.glade", ["boxMain"])
+        self.builder.add_objects_from_file(WORK_DIR + "/nautilus-prop.glade", ["boxMain"])
         self.bbox = self.builder.get_object("boxMain")
         self.bbox.show()
         
@@ -69,6 +70,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.tvPermissions = self.builder.get_object("tvPermissions")
         self.btnPermApply = self.builder.get_object("btnPermApply")
         self.btnObjRemove = self.builder.get_object("btnObjRemove")
+        self.btnObjAdd = self.builder.get_object("btnObjAdd")
         
         # tvObjects
         renderer = Gtk.CellRendererText()
@@ -107,6 +109,17 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # btnObjRemove
         self.btnObjRemove.connect("clicked", self.btnObjRemove_clicked)
+        
+        # btnObjAdd
+        self.btnObjAdd.connect("clicked", self.btnObjAdd_clicked)
+        
+        # Load further widgets for adding ACLs
+        self.builder_add_acl = Gtk.Builder()
+        self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-prop-add-acl.glade", ["boxMain"])
+        boxAddACL = self.builder_add_acl.get_object("boxMain")
+        
+        self.win_add_acl = Gtk.Window()
+        self.win_add_acl.add(boxAddACL)
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"
@@ -161,9 +174,15 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         objectsModel = self.tvObjects.get_model()
         selection = self.tvObjects.get_selection()
         tv, iterObjects = selection.get_selected()
+        if not iterObjects:
+            return
+        
         objACL = objectsModel.get_value(iterObjects, 0)
         
         # We remove now the selected entry
         print "removing", objACL.object
         if self.advacllibrary.remove_acl(objACL, self.filename):
             objectsModel.remove(iterObjects)
+            
+    def btnObjAdd_clicked(self, button):
+        self.win_add_acl.show()

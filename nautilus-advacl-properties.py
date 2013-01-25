@@ -84,7 +84,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # tvPermissions
         renderer2 = Gtk.CellRendererText()
-        column2 = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
+        column2 = Gtk.TreeViewColumn(_("Object"), renderer2, text=1)
         column2.set_min_width(350)
         self.tvPermissions.append_column(column2)
         
@@ -115,13 +115,13 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.btnObjAdd.connect("clicked", self.btnObjAdd_clicked)
         
         # Load further widgets for adding ACLs
-        self.builder_add_acl = Gtk.Builder()
-        self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
-        boxAddACL = self.builder_add_acl.get_object("boxMain")
+        #self.builder_add_acl = Gtk.Builder()
+        #self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
+        #boxAddACL = self.builder_add_acl.get_object("boxMain")
         
-        self.win_add_acl = NautilusWindowAddACL()
-        self.win_add_acl.set_modal(True)
-        self.win_add_acl.add(boxAddACL)
+        #self.win_add_acl = NautilusWindowAddACL(self)
+        #self.win_add_acl.set_modal(True)
+        #self.win_add_acl.add(boxAddACL)
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"
@@ -187,4 +187,8 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
             objectsModel.remove(iterObjects)
             
     def btnObjAdd_clicked(self, button):
+        # Yeah, we need to load the glade file everytime coz else it will only show up the first time
+        self.builder_add_acl = Gtk.Builder()
+        self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
+        self.win_add_acl = NautilusWindowAddACL(self)
         self.win_add_acl.show()

@@ -23,6 +23,7 @@ import nautilusadvacllib as advacllib
 class NautilusWindowAddACL(Gtk.Window):
     def __init__(self, window):
         Gtk.Window.__init__(self)
+        self.advacllibrary = advacllib.AdvACLLibrary()
         
         self.set_title(_("Nautilus - Add new ACL"))
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -39,6 +40,7 @@ class NautilusWindowAddACL(Gtk.Window):
         self.objTypes = self.objWindowMain.builder_add_acl.get_object("cbObjectTypes")
         self.tvObjects = self.objWindowMain.builder_add_acl.get_object("tvObjects")
         self.tvPermissions = self.objWindowMain.builder_add_acl.get_object("tvPermissions")
+        self.btnAddObject = self.objWindowMain.builder_add_acl.get_object("btnAddObject")
         
         self.add(self.boxMain)
         
@@ -68,8 +70,8 @@ class NautilusWindowAddACL(Gtk.Window):
         self.tvPermissions.set_model(store)
         
         objTypesStore = Gtk.ListStore(str, str)
-        objTypesStore.append(["users", _("Users")])
-        objTypesStore.append(["groups", _("Groups")])
+        objTypesStore.append(["user", _("Users")])
+        objTypesStore.append(["group", _("Groups")])
         self.objTypes.set_model(objTypesStore)
         
         renderer_text = Gtk.CellRendererText()
@@ -82,6 +84,9 @@ class NautilusWindowAddACL(Gtk.Window):
         column = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
         self.tvObjects.append_column(column)
         
+        # btnObjAdd
+        self.btnAddObject.connect("clicked", self.btnAddObject_clicked)
+        
     def cbObjectTypes_changed(self, combo):
         # Type has changed, we have to update our list of acl objects
         model = self.objTypes.get_model()
@@ -92,12 +97,12 @@ class NautilusWindowAddACL(Gtk.Window):
         
         objStore = Gtk.ListStore(str, str)
         
-        if type == "groups":
+        if type == "group":
             groups = grp.getgrall()
             for group in groups:
                 objStore.append([group[0], group[0]])
                 
-        elif type == "users":
+        elif type == "user":
             users = pwd.getpwall()
             for user in users:
                 objStore.append([user[0], user[0]])
@@ -114,3 +119,30 @@ class NautilusWindowAddACL(Gtk.Window):
             model.set_value(iter, 2, False)
         elif state == False:
             model.set_value(iter, 2, True)
+            
+    def btnAddObject_clicked(self, button):
+        model = self.tvPermissions.get_model()
+        selection = self.tvObjects.get_selection()
+        tv, iterObjects = selection.get_selected()
+        if iterObjects == None:
+            return 
+        
+        # Get ACL object
+        objectsModel = self.tvObjects.get_model()
+        object = objectsModel.get_value(iterObjects, 0)
+        
+        # Get ACL type
+        idx = self.objTypes.get_active()
+        type = self.objTypes.get_model()[idx][0]
+        
+        # Get ACL permissions
+        permModel = self.tvPermissions.get_model()
+        
+        objAdvACL = advacllib.AdcACLObject(type, object)
+        objPerm = advacllib.AdcACLPermission()
+        objPerm.setPerm(permModel[0][0], permModel[0][2])
+        objPerm.setPerm(permModel[1][0], permModel[1][2])
+        objPerm.setPerm(permModel[2][0], permModel[2][2])
+        objAdvACL.perm = objPerm
+        
+        self.advacllibrary.set_permissions(objAdvACL, self.objWindowMain.filename)

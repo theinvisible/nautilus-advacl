@@ -10,7 +10,7 @@ import re
 import subprocess
 
 class AdcACLPermission:
-    def __init__(self, perm):
+    def __init__(self, perm=None):
         self.read = False
         self.write = False
         self.execute = False
@@ -19,6 +19,9 @@ class AdcACLPermission:
         self.convert(perm)
         
     def convert(self, perm):
+        if perm == None:
+            return
+        
         if perm[0] == "r":
             self.read = True
             
@@ -48,10 +51,13 @@ class AdcACLPermission:
         return strPerm
             
 class AdcACLObject:
-    def __init__(self, a_realm, a_object, a_perm):
+    def __init__(self, a_realm, a_object, a_perm=None):
         self.realm = a_realm
         self.object = a_object
-        self.perm = AdcACLPermission(a_perm)
+        if a_perm == None:
+            self.perm = None
+        else:
+            self.perm = AdcACLPermission(a_perm)
 
 class AdvACLLibrary:
     def __init__(self):

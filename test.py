@@ -10,12 +10,12 @@ import sys
 import os
 
 from gi.repository import Nautilus, GObject, Gtk
-
 #
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/nautilus-advacl")
 
 import nautilusadvacllib
+from nautiluspropaddacl import NautilusWindowAddACL
 
 print sys.path
 
@@ -51,14 +51,23 @@ def on_cell_toggled(widget, path):
         model.set_value(iter, 1, False)
     elif state == False:
         model.set_value(iter, 1, True)
+        
+def btnObjAdd_clicked(button):
+    builder.add_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-advacl/nautilus-prop-add-acl.glade")
+    #bbox = builder.get_objects()
+    bbox = builder.get_object("boxMain")
+    win_add_acl = NautilusWindowAddACL()
+    win_add_acl.set_modal(True)
+    win_add_acl.add(bbox)
+    win_add_acl.show()
 
 builder = Gtk.Builder()
 #builder.add_objects_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-prop.glade", ["boxMain"])
-builder.add_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-prop.glade")
+builder.add_from_file("/home/rene/DEV/eclipse/nautilus-advacl/nautilus-advacl/nautilus-prop.glade")
 #bbox = builder.get_objects()
 bbox = builder.get_object("window1")
 bbox.connect("destroy", Gtk.main_quit)
-print bbox
+bbox.set_position(Gtk.WindowPosition.CENTER)
 bbox.show()
 
 # Treeview
@@ -99,6 +108,9 @@ tvPermissions.append_column(column_toggle)
 #renderer_toggle2 = Gtk.CellRendererToggle()
 #column_toggle2 = Gtk.TreeViewColumn("Verweigern", renderer_toggle2, active=2)
 #tvPermissions.append_column(column_toggle2)
+
+btnObjAdd = builder.get_object("btnObjAdd")
+btnObjAdd.connect("clicked", btnObjAdd_clicked)
 
 lib = nautilusadvacllib.AdvACLLibrary()
 perms = lib.get_permissions("/home/rene/tmp/test")

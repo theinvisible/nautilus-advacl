@@ -17,6 +17,7 @@ WORK_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(WORK_DIR + "/nautilus-advacl")
 
 import nautilusadvacllib as advacllib
+from nautiluspropaddacl import NautilusWindowAddACL
 
 class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def __init__(self):
@@ -40,7 +41,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.property_label.show()   
         
         self.builder = Gtk.Builder()
-        self.builder.add_objects_from_file(WORK_DIR + "/nautilus-prop.glade", ["boxMain"])
+        self.builder.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop.glade", ["boxMain"])
         self.bbox = self.builder.get_object("boxMain")
         self.bbox.show()
         
@@ -115,10 +116,11 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # Load further widgets for adding ACLs
         self.builder_add_acl = Gtk.Builder()
-        self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-prop-add-acl.glade", ["boxMain"])
+        self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
         boxAddACL = self.builder_add_acl.get_object("boxMain")
         
-        self.win_add_acl = Gtk.Window()
+        self.win_add_acl = NautilusWindowAddACL()
+        self.win_add_acl.set_modal(True)
         self.win_add_acl.add(boxAddACL)
         
     def tvObjects_sel_changed(self, sel):

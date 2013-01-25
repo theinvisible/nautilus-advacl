@@ -128,7 +128,6 @@
                       <object class="GtkTreeView" id="tvPermissions">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="vexpand">True</property>
                         <property name="border_width">3</property>
                         <property name="search_column">0</property>
                       </object>

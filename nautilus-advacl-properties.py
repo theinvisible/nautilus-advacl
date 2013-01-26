@@ -81,6 +81,8 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.init_widgets()
         self.load_acls()
         
+        self.tvObjects_sel_first_row()
+        
         return Nautilus.PropertyPage(name="Advanced ACL",
                                      label=self.property_label, 
                                      page=self.bbox),
@@ -105,6 +107,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.btnPermApply = self.builder.get_object("btnPermApply")
         self.btnObjRemove = self.builder.get_object("btnObjRemove")
         self.btnObjAdd = self.builder.get_object("btnObjAdd")
+        self.cbxDefaultACL = self.builder.get_object("cbxDefaultACL")
         
         # tvObjects
         renderer = Gtk.CellRendererText()
@@ -156,6 +159,8 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         #self.win_add_acl.set_modal(True)
         #self.win_add_acl.add(boxAddACL)
         self.btnObjAdd.connect("destroy", self.cleanupAdvACL)
+        
+        self.cbxDefaultACL.connect("toggled", self.cbxDefaultACL_toggled)
         
     def tvObjects_sel_first_row(self):
         model = self.tvObjects.get_model()
@@ -239,3 +244,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         print "cleanup"
         #self.wmFile.rm_watch(self.wddFile.values())
         #self.notifierFile.stop()
+        
+    def cbxDefaultACL_toggled(self, cbx):
+        print "default toggled"
+        self.load_acls()

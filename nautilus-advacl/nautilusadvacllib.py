@@ -51,9 +51,10 @@ class AdcACLPermission:
         return strPerm
             
 class AdcACLObject:
-    def __init__(self, a_realm, a_object, a_perm=None):
+    def __init__(self, a_realm, a_object, a_perm=None, a_default=False):
         self.realm = a_realm
         self.object = a_object
+        self.default = a_default
         if a_perm == None:
             self.perm = None
         else:
@@ -63,6 +64,7 @@ class AdvACLLibrary:
     def __init__(self):
         #self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):{3}$")
         self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):([rwx\-]{3})$")
+        self.re_dflacl = re.compile("^default:(user|group|mask|other):([^:]*):([rwx\-]{3})$")
     
     def get_permissions(self, filename):
         perm = []

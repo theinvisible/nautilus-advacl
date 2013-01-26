@@ -25,7 +25,9 @@ class FileEvent(pyinotify.ProcessEvent):
         self.main = objMain
     
     def process_IN_ATTRIB(self, event):
-        print "Metadata:", event.pathname
+        print "Metadata changed:", event.pathname
+        self.main.load_acls()
+        self.main.tvObjects_sel_first_row()
 
 class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def __init__(self):
@@ -154,6 +156,14 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         #self.win_add_acl.set_modal(True)
         #self.win_add_acl.add(boxAddACL)
         self.btnObjAdd.connect("destroy", self.cleanupAdvACL)
+        
+    def tvObjects_sel_first_row(self):
+        model = self.tvObjects.get_model()
+        if model.get_iter_first() == None:
+            return
+        
+        selection = self.tvObjects.get_selection()
+        selection.select_iter(model.get_iter_first())
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"

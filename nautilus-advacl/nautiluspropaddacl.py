@@ -156,7 +156,7 @@ class NautilusWindowAddACL(Gtk.Window):
         
         self.advacllibrary.set_permissions(objAdvACL, self.objWindowMain.filename)
         
-        self.objWindowMain.load_acls()
+        #self.objWindowMain.load_acls()
         self.destroy()
         
     def btnCancel_clicked(self, button):

@@ -9,8 +9,9 @@ import os
 import sys
 import locale
 import urllib
+import pyinotify
 
-from gi.repository import Nautilus, GObject, Gtk
+from gi.repository import Nautilus, GObject, Gtk, GLib
 from locale import gettext as _
 
 WORK_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -19,11 +20,41 @@ sys.path.append(WORK_DIR + "/nautilus-advacl")
 import nautilusadvacllib as advacllib
 from nautiluspropaddacl import NautilusWindowAddACL
 
+class FileEvent(pyinotify.ProcessEvent):
+    def __init__(self, objMain):
+        self.main = objMain
+    
+    def process_IN_ATTRIB(self, event):
+        print "Metadata:", event.pathname
+
 class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def __init__(self):
         #locale.bindtextdomain('nautilusadvacl', '/opt/extras.ubuntu.com/qreator/share/locale/')
         locale.textdomain('nautilusadvacl')
         self.advacllibrary = advacllib.AdvACLLibrary()
+    
+    def init_fileeventhandler(self):
+        # Install inotify handler
+        print "Observing: ", self.filename
+        
+        wm = pyinotify.WatchManager()
+        mask = pyinotify.IN_ATTRIB
+        handler = FileEvent(self)
+        self.notifierFile = pyinotify.Notifier(wm, handler, timeout=10)
+        wdd = wm.add_watch(self.filename, mask, rec=True)
+        #self.notifierFile = pyinotify.ThreadedNotifier(self.wmFile, handler)
+        #self.notifierFile.start()
+        
+        #self.wddFile = self.wmFile.add_watch(self.filename, mask, rec=True)
+        GLib.timeout_add(500, self.checkFileEvents)
+        
+    def checkFileEvents(self):
+        self.notifierFile.process_events()
+        while self.notifierFile.check_events():
+            self.notifierFile.read_events()
+            self.notifierFile.process_events()
+            
+        return True
     
     def get_property_pages(self, files):
         if len(files) != 1:
@@ -35,7 +66,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
             return
         
         self.filename = urllib.unquote(file.get_uri()[7:])
-        print self.filename
+        self.init_fileeventhandler()
 
         self.property_label = Gtk.Label(_("Advanced ACL"))
         self.property_label.show()   
@@ -122,6 +153,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         #self.win_add_acl = NautilusWindowAddACL(self)
         #self.win_add_acl.set_modal(True)
         #self.win_add_acl.add(boxAddACL)
+        self.btnObjAdd.connect("destroy", self.cleanupAdvACL)
         
     def tvObjects_sel_changed(self, sel):
         #print "selection changed2!!!"
@@ -192,3 +224,8 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
         self.win_add_acl = NautilusWindowAddACL(self)
         self.win_add_acl.show()
+        
+    def cleanupAdvACL(self, data):
+        print "cleanup"
+        #self.wmFile.rm_watch(self.wddFile.values())
+        #self.notifierFile.stop()

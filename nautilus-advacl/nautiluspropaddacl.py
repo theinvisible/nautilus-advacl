@@ -41,6 +41,7 @@ class NautilusWindowAddACL(Gtk.Window):
         self.tvObjects = self.objWindowMain.builder_add_acl.get_object("tvObjects")
         self.tvPermissions = self.objWindowMain.builder_add_acl.get_object("tvPermissions")
         self.btnAddObject = self.objWindowMain.builder_add_acl.get_object("btnAddObject")
+        self.btnCancel = self.objWindowMain.builder_add_acl.get_object("btnCancel")
         
         self.add(self.boxMain)
         
@@ -87,6 +88,9 @@ class NautilusWindowAddACL(Gtk.Window):
         # btnObjAdd
         self.btnAddObject.connect("clicked", self.btnAddObject_clicked)
         
+        # btnCancel
+        self.btnCancel.connect("clicked", self.btnCancel_clicked)
+        
     def cbObjectTypes_changed(self, combo):
         # Type has changed, we have to update our list of acl objects
         model = self.objTypes.get_model()
@@ -125,6 +129,11 @@ class NautilusWindowAddACL(Gtk.Window):
         selection = self.tvObjects.get_selection()
         tv, iterObjects = selection.get_selected()
         if iterObjects == None:
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, _("Not all required fields was provided"))
+            dialog.format_secondary_text(_("Please choose a object you want to add."))
+            dialog.run()    
+            dialog.destroy()
+        
             return 
         
         # Get ACL object
@@ -146,3 +155,9 @@ class NautilusWindowAddACL(Gtk.Window):
         objAdvACL.perm = objPerm
         
         self.advacllibrary.set_permissions(objAdvACL, self.objWindowMain.filename)
+        
+        self.objWindowMain.load_acls()
+        self.destroy()
+        
+    def btnCancel_clicked(self, button):
+        self.destroy()

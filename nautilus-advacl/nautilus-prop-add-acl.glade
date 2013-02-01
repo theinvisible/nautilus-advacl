@@ -72,7 +72,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="checkDefaultACL">
+                          <object class="GtkCheckButton" id="cbxDefaultACL">
                             <property name="label" translatable="yes">Default ACL</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>

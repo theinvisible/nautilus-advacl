@@ -93,7 +93,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         tvPermissions = self.builder.get_object("tvPermissions")
         tvObjects.set_model(None)
         
-        permList = self.advacllibrary.get_permissions(self.filename)
+        permList = self.advacllibrary.get_permissions(self.filename, self.cbxDefaultACL.get_active())
         permStore = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
         
         for permObj in permList:
@@ -248,3 +248,4 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def cbxDefaultACL_toggled(self, cbx):
         print "default toggled"
         self.load_acls()
+        self.tvObjects_sel_first_row()

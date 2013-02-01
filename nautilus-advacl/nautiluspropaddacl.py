@@ -42,6 +42,7 @@ class NautilusWindowAddACL(Gtk.Window):
         self.tvPermissions = self.objWindowMain.builder_add_acl.get_object("tvPermissions")
         self.btnAddObject = self.objWindowMain.builder_add_acl.get_object("btnAddObject")
         self.btnCancel = self.objWindowMain.builder_add_acl.get_object("btnCancel")
+        self.cbxDefaultACL = self.objWindowMain.builder_add_acl.get_object("cbxDefaultACL")
         
         self.add(self.boxMain)
         
@@ -147,7 +148,7 @@ class NautilusWindowAddACL(Gtk.Window):
         # Get ACL permissions
         permModel = self.tvPermissions.get_model()
         
-        objAdvACL = advacllib.AdcACLObject(type, object)
+        objAdvACL = advacllib.AdcACLObject(type, object, a_default=self.cbxDefaultACL.get_active())
         objPerm = advacllib.AdcACLPermission()
         objPerm.setPerm(permModel[0][0], permModel[0][2])
         objPerm.setPerm(permModel[1][0], permModel[1][2])

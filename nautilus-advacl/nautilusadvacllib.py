@@ -66,7 +66,7 @@ class AdvACLLibrary:
         self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):([rwx\-]{3})$")
         self.re_dflacl = re.compile("^default:(user|group|mask|other):([^:]*):([rwx\-]{3})$")
     
-    def get_permissions(self, filename):
+    def get_permissions(self, filename, a_default=False):
         perm = []
         
         if not os.path.exists(filename):
@@ -75,8 +75,14 @@ class AdvACLLibrary:
         output = subprocess.check_output(["getfacl", filename])
         out_lines = output.split("\n")
         
+        regexp = ""
+        if a_default == True:
+            regexp = self.re_dflacl
+        else:
+            regexp = self.re_stdacl
+        
         for line in out_lines:
-            m_result = self.re_stdacl.match(line)
+            m_result = regexp.match(line)
             if m_result:
                 res_realm = m_result.group(1)
                 res_object = m_result.group(2)
@@ -85,12 +91,15 @@ class AdvACLLibrary:
                 if not res_object:
                     continue
                 
-                perm.append(AdcACLObject(res_realm, res_object, res_perm))
+                perm.append(AdcACLObject(res_realm, res_object, res_perm, a_default))
                     
         return perm
     
     def set_permissions(self, objAdcACL, filename):
         strPerm = ""
+        
+        if objAdcACL.default == True:
+            strPerm += "default:"
         
         strPerm += objAdcACL.realm + ":"
         strPerm += objAdcACL.object + ":"
@@ -105,6 +114,9 @@ class AdvACLLibrary:
             
     def remove_acl(self, objAdcACL, filename):
         strRemove = ""
+        
+        if objAdcACL.default == True:
+            strRemove += "default:"
         
         strRemove += objAdcACL.realm + ":"
         strRemove += objAdcACL.object

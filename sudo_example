@@ -1,0 +1,7 @@
+# Please adjust to your needs
+
+# The group adm can execute setfacl as root without password
+#%adm    ALL=(ALL) NOPASSWD: /bin/setfacl *
+
+# The user rene can execute setfacl as root without password
+#rene    ALL=(ALL) NOPASSWD: /bin/setfacl *

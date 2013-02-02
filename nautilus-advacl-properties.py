@@ -31,7 +31,7 @@ class FileEvent(pyinotify.ProcessEvent):
 
 class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def __init__(self):
-        #locale.bindtextdomain('nautilusadvacl', '/opt/extras.ubuntu.com/qreator/share/locale/')
+        locale.bindtextdomain('nautilusadvacl', WORK_DIR + '/nautilus-advacl/locale/')
         locale.textdomain('nautilusadvacl')
         self.advacllibrary = advacllib.AdvACLLibrary()
     

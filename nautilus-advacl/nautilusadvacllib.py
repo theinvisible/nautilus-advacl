@@ -108,7 +108,7 @@ class AdvACLLibrary:
         print strPerm
         
         try:
-            subprocess.check_output(["setfacl", "-m", strPerm, filename])
+            subprocess.check_output(["sudo", "setfacl", "-m", strPerm, filename])
         except subprocess.CalledProcessError as e:
             print "Error occured while executing setfacl. Message: {0}".format(e.output)
             
@@ -124,7 +124,7 @@ class AdvACLLibrary:
         print strRemove
         
         try:
-            subprocess.check_output(["setfacl", "-x", strRemove, filename])
+            subprocess.check_output(["sudo", "setfacl", "-x", strRemove, filename])
             return True
         except subprocess.CalledProcessError as e:
             print "Error occured while executing setfacl. Message: {0}".format(e.output)

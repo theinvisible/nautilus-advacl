@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-02 09:22+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../nautilus-advacl-properties.py:73
+msgid "Advanced ACL"
+msgstr ""
+
+#: ../nautilus-advacl-properties.py:114 ../nautilus-advacl-properties.py:123
+#: nautiluspropaddacl.py:53 nautiluspropaddacl.py:86
+msgid "Object"
+msgstr ""
+
+#: ../nautilus-advacl-properties.py:129 nautiluspropaddacl.py:59
+msgid "Grant"
+msgstr ""
+
+#: ../nautilus-advacl-properties.py:139 nautiluspropaddacl.py:69
+#: nautilus-prop.glade:48
+msgid "Read"
+msgstr ""
+
+#: ../nautilus-advacl-properties.py:140 nautiluspropaddacl.py:70
+#: nautilus-prop.glade:65
+msgid "Write"
+msgstr ""
+
+#: ../nautilus-advacl-properties.py:141 nautiluspropaddacl.py:71
+#: nautilus-prop.glade:82
+msgid "Execute"
+msgstr ""
+
+#: nautilus-prop-add-acl.glade:41
+msgid "Object Types:"
+msgstr ""
+
+#: nautilus-prop-add-acl.glade:76
+msgid "Default ACL"
+msgstr ""
+
+#: nautilus-prop-add-acl.glade:131
+msgid "<b>Users/Groups</b>"
+msgstr ""
+
+#: nautilus-prop-add-acl.glade:185
+msgid "<b>Permissions</b>"
+msgstr ""
+
+#: nautilus-prop-add-acl.glade:203
+msgid "Cancel"
+msgstr ""
+
+#: nautilus-prop-add-acl.glade:221
+msgid "Add object to ACL"
+msgstr ""
+
+#: nautiluspropaddacl.py:28
+msgid "Nautilus - Add new ACL"
+msgstr ""
+
+#: nautiluspropaddacl.py:75
+msgid "Users"
+msgstr ""
+
+#: nautiluspropaddacl.py:76
+msgid "Groups"
+msgstr ""
+
+#: nautiluspropaddacl.py:133
+msgid "Not all required fields was provided"
+msgstr ""
+
+#: nautiluspropaddacl.py:134
+msgid "Please choose a object you want to add."
+msgstr ""
+
+#: nautilus-prop.glade:38
+msgid "Mask Permission:"
+msgstr ""
+
+#: nautilus-prop.glade:105
+msgid "<b>General</b>"
+msgstr ""
+
+#: nautilus-prop.glade:165
+msgid "Default ACLs"
+msgstr ""
+
+#. Remove user/group
+#: nautilus-prop.glade:185
+msgid "Remove"
+msgstr ""
+
+#. Add user/group
+#: nautilus-prop.glade:201
+msgid "Add..."
+msgstr ""
+
+#: nautilus-prop.glade:231
+msgid "<b>Assigned users/groups</b>"
+msgstr ""
+
+#. Apply permissions
+#: nautilus-prop.glade:284
+msgid "Apply"
+msgstr ""
+
+#: nautilus-prop.glade:312
+msgid "<b>Assigned permissions</b>"
+msgstr ""

@@ -1,0 +1,8 @@
+# Get all translations (run from nautilus-advacl subdir)
+xgettext -d nautilusadvacl -p locale/ ../nautilus-advacl-properties.py nautilusadvacllib.py nautilus-prop-add-acl.glade nautiluspropaddacl.py nautilus-prop.glade
+
+# Create a translateable file for specific language
+msginit -l en
+
+# Compile translated .po file to .mo
+msgfmt -o nautilusadvacl.mo nautilusadvacl.po

@@ -1,0 +1,13 @@
+Source: nautilus-advacl
+Section: gnome
+Priority: extra
+Maintainer: Rene Hadler <rene@iksdeh.at>
+Build-Depends: debhelper (>= 8.0.0)
+
+Package: nautilus-advacl
+Architecture: all
+Depends: python-nautilus (>= 1.1-3), sudo, acl
+Conflicts:
+Replaces:
+Provides: nautilus-advacl
+Description: Nautilus extension to manage Advanced ACLs from Nautilus interface

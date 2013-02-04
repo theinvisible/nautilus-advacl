@@ -43,7 +43,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         mask = pyinotify.IN_ATTRIB
         handler = FileEvent(self)
         self.notifierFile = pyinotify.Notifier(wm, handler, timeout=10)
-        wdd = wm.add_watch(self.filename, mask, rec=True)
+        wdd = wm.add_watch(self.filename, mask, rec=False)
         #self.notifierFile = pyinotify.ThreadedNotifier(self.wmFile, handler)
         #self.notifierFile.start()
         

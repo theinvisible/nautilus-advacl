@@ -105,12 +105,14 @@ class AdvACLLibrary:
         strPerm += objAdcACL.object + ":"
         strPerm += objAdcACL.perm.format_as_string() + " "
         
-        print strPerm
-        
         try:
-            subprocess.check_output(["sudo", "setfacl", "-m", strPerm, filename])
-        except subprocess.CalledProcessError as e:
-            print "Error occured while executing setfacl. Message: {0}".format(e.output)
+            subprocess.check_output(["setfacl", "-m", strPerm, filename])
+        except subprocess.CalledProcessError:
+            print "No success running as user, try with sudo and then give up..."
+            try:
+                subprocess.check_output(["pkexec", "setfacl", "-m", strPerm, filename])
+            except subprocess.CalledProcessError:
+                print "Command denied, coninue..."
             
     def remove_acl(self, objAdcACL, filename):
         strRemove = ""
@@ -121,11 +123,14 @@ class AdvACLLibrary:
         strRemove += objAdcACL.realm + ":"
         strRemove += objAdcACL.object
         
-        print strRemove
-        
         try:
-            subprocess.check_output(["sudo", "setfacl", "-x", strRemove, filename])
+            subprocess.check_output(["setfacl", "-x", strRemove, filename])
             return True
         except subprocess.CalledProcessError as e:
-            print "Error occured while executing setfacl. Message: {0}".format(e.output)
-            return False
+            print "No success running as user, try with sudo and then give up..."
+            try:
+                subprocess.check_output(["pkexec", "setfacl", "-x", strRemove, filename])
+                return True
+            except subprocess.CalledProcessError:
+                print "Command denied, coninue..."
+                return False

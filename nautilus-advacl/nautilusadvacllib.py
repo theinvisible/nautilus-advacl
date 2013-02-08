@@ -63,8 +63,8 @@ class AdcACLObject:
 class AdvACLLibrary:
     def __init__(self):
         #self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):{3}$")
-        self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):([rwx\-]{3})$")
-        self.re_dflacl = re.compile("^default:(user|group|mask|other):([^:]*):([rwx\-]{3})$")
+        self.re_stdacl = re.compile("^(user|group|mask|other):([^:]*):([rwx\-]{3})")
+        self.re_dflacl = re.compile("^default:(user|group|mask|other):([^:]*):([rwx\-]{3})")
     
     def get_permissions(self, filename, a_default=False):
         perm = []

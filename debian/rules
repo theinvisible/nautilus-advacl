@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	mkdir -p debian/nautilus-advacl/usr/share/nautilus-python/extensions
+	cp -a nautilus-advacl-properties.py debian/nautilus-advacl/usr/share/nautilus-python/extensions/.
+	cp -a nautilus-advacl debian/nautilus-advacl/usr/share/nautilus-python/extensions/.
+	rm debian/nautilus-advacl/usr/share/nautilus-python/extensions/*.pyc || true
+	rm debian/nautilus-advacl/usr/share/nautilus-python/extensions/nautilus-advacl/*.pyc || true
+	rm debian/nautilus-advacl/usr/share/nautilus-python/extensions/nautilus-advacl/locale/scripts.txt || true 

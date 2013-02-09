@@ -1,12 +1,12 @@
 Source: nautilus-advacl
 Section: gnome
-Priority: extra
+Priority: optional
 Maintainer: Rene Hadler <rene@iksdeh.at>
 Build-Depends: debhelper (>= 8.0.0)
 
 Package: nautilus-advacl
 Architecture: all
-Depends: python-nautilus (>= 1.1-3), sudo, acl
+Depends: python-nautilus (>= 1.1-3), acl
 Conflicts:
 Replaces:
 Provides: nautilus-advacl

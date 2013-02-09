@@ -1,0 +1,12 @@
+nautilus-advacl (0.6-1) precise; urgency=low
+
+  * Using polkit instead of sudo
+  * pyinotify is not watching the file/directory recursive
+
+ -- Rene Hadler <rene@iksdeh.at>  Sat, 09 Feb 2013 20:01:00 +0100
+
+nautilus-advacl (0.5) precise; urgency=low
+
+  * initial release
+
+ -- Rene Hadler <rene@iksdeh.at> Sat, 02 Feb 2013 14:26:32 +0100

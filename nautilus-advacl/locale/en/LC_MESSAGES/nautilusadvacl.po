@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: nautilus-advacl\n"
+"Report-Msgid-Bugs-To: rene@iksdeh.at\n"
 "POT-Creation-Date: 2013-02-02 09:22+0100\n"
-"PO-Revision-Date: 2013-02-02 09:46+0100\n"
+"PO-Revision-Date: 2013-02-10 11:10+0100\n"
 "Last-Translator: Rene Hadler <rene@iksdeh.at>\n"
-"Language-Team: English\n"
+"Language-Team: Deutsch <>\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ../nautilus-advacl-properties.py:73
 msgid "Advanced ACL"
@@ -83,7 +83,7 @@ msgstr "Groups"
 
 #: nautiluspropaddacl.py:133
 msgid "Not all required fields was provided"
-msgstr "Not all required fields was provided"
+msgstr "Not all required fields were provided"
 
 #: nautiluspropaddacl.py:134
 msgid "Please choose a object you want to add."

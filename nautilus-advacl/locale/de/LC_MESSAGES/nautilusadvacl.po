@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: nautilus-advacl\n"
 "Report-Msgid-Bugs-To: rene@iksdeh.at\n"
 "POT-Creation-Date: 2013-02-02 09:22+0100\n"
-"PO-Revision-Date: 2013-02-02 09:57+0100\n"
+"PO-Revision-Date: 2013-02-10 11:10+0100\n"
 "Last-Translator: Rene Hadler <rene@iksdeh.at>\n"
 "Language-Team: Deutsch <>\n"
 "Language: de\n"
@@ -88,7 +88,7 @@ msgstr "Es wurden nicht alle benötigten Daten ausgewählt"
 
 #: nautiluspropaddacl.py:134
 msgid "Please choose a object you want to add."
-msgstr "Bitte wähle ein Objekt das du hinzufügen möchtest"
+msgstr "Bitte wähle ein Objekt das du hinzufügen möchtest."
 
 #: nautilus-prop.glade:38
 msgid "Mask Permission:"

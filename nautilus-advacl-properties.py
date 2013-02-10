@@ -44,10 +44,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         handler = FileEvent(self)
         self.notifierFile = pyinotify.Notifier(wm, handler, timeout=10)
         wdd = wm.add_watch(self.filename, mask, rec=False)
-        #self.notifierFile = pyinotify.ThreadedNotifier(self.wmFile, handler)
-        #self.notifierFile.start()
-        
-        #self.wddFile = self.wmFile.add_watch(self.filename, mask, rec=True)
+
         GLib.timeout_add(500, self.checkFileEvents)
         
     def checkFileEvents(self):
@@ -126,7 +123,6 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         selection = self.tvObjects.get_selection()
         selection.connect("changed", self.tvObjects_sel_changed)
-        #tvObjects.connect("cursor-changed", self.tvObjects_sel_changed)
         
         # tvPermissions
         renderer2 = Gtk.CellRendererText()
@@ -139,10 +135,6 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         column_toggle = Gtk.TreeViewColumn(_("Grant"), renderer_toggle, active=2)
         column_toggle.set_min_width(100)
         self.tvPermissions.append_column(column_toggle)
-        
-        #renderer_toggle2 = Gtk.CellRendererToggle()
-        #column_toggle2 = Gtk.TreeViewColumn(_("Deny"), renderer_toggle2, active=2)
-        #self.tvPermissions.append_column(column_toggle2)
         
         # tvPermissions data
         store = Gtk.ListStore(str, str, bool)
@@ -159,15 +151,8 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # btnObjAdd
         self.btnObjAdd.connect("clicked", self.btnObjAdd_clicked)
-        
-        # Load further widgets for adding ACLs
-        #self.builder_add_acl = Gtk.Builder()
-        #self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
-        #boxAddACL = self.builder_add_acl.get_object("boxMain")
-        
-        #self.win_add_acl = NautilusWindowAddACL(self)
-        #self.win_add_acl.set_modal(True)
-        #self.win_add_acl.add(boxAddACL)
+
+        # on_destroy event
         self.btnObjAdd.connect("destroy", self.cleanupAdvACL)
         
         self.cbxDefaultACL.connect("toggled", self.cbxDefaultACL_toggled)
@@ -189,7 +174,6 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         model = self.tvObjects.get_model()
         objACL = model.get_value(iter, 0)
-        #print "selected", model.get_value(iter, 1)
         self.tvPermissions_set_permission(objACL.perm)
         
     def tvPermissions_set_permission(self, objPerm):
@@ -252,8 +236,6 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
     def cleanupAdvACL(self, data):
         print "cleanup"
-        #self.wmFile.rm_watch(self.wddFile.values())
-        #self.notifierFile.stop()
         
     def cbxDefaultACL_toggled(self, cbx):
         print "default toggled"

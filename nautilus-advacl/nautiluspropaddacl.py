@@ -60,10 +60,6 @@ class NautilusWindowAddACL(Gtk.Window):
         column_toggle.set_min_width(100)
         self.tvPermissions.append_column(column_toggle)
         
-        #renderer_toggle2 = Gtk.CellRendererToggle()
-        #column_toggle2 = Gtk.TreeViewColumn(_("Deny"), renderer_toggle2, active=2)
-        #self.tvPermissions.append_column(column_toggle2)
-        
         # tvPermissions data
         store = Gtk.ListStore(str, str, bool)
         store.append(["r", _("Read"), False])

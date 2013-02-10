@@ -84,6 +84,7 @@ class NautilusWindowAddACL(Gtk.Window):
         
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
+        column.set_sort_column_id(1)
         self.tvObjects.append_column(column)
         
         # btnObjAdd
@@ -91,6 +92,9 @@ class NautilusWindowAddACL(Gtk.Window):
         
         # btnCancel
         self.btnCancel.connect("clicked", self.btnCancel_clicked)
+        
+        # Do default sorting when init widgets
+        column.clicked()
         
     def cbObjectTypes_changed(self, combo):
         # Type has changed, we have to update our list of acl objects
@@ -113,6 +117,11 @@ class NautilusWindowAddACL(Gtk.Window):
                 objStore.append([user[0], user[0]])
                 
         self.tvObjects.set_model(objStore)
+        
+        # Do default sorting when reloading list
+        column = self.tvObjects.get_column(0)
+        if column:
+            column.clicked()
         
     def tvPermissions_toggled(self, widget, path):
         model = self.tvPermissions.get_model()

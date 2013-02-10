@@ -58,6 +58,16 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
             
         return True
     
+    def setColumnOrder(self):
+        # Do default sorting when init
+        column = self.tvObjects.get_column(0)
+        if column:
+            column.clicked()
+            
+        self.tvObjects_sel_first_row()
+        
+        return False
+    
     def get_property_pages(self, files):
         if len(files) != 1:
             return
@@ -81,8 +91,6 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.init_widgets()
         self.load_acls()
         
-        self.tvObjects_sel_first_row()
-        
         return Nautilus.PropertyPage(name="Advanced ACL",
                                      label=self.property_label, 
                                      page=self.bbox),
@@ -100,6 +108,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
             permStore.append([permObj, permObj.object + " (" + permObj.realm + ")"])
             
         tvObjects.set_model(permStore)
+        self.setColumnOrder()
         
     def init_widgets(self):
         self.tvObjects = self.builder.get_object("tvObjects")
@@ -112,6 +121,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         # tvObjects
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
+        column.set_sort_column_id(1)
         self.tvObjects.append_column(column)
         
         selection = self.tvObjects.get_selection()

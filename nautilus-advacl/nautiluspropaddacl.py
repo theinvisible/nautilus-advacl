@@ -46,8 +46,6 @@ class NautilusWindowAddACL(Gtk.Window):
         
         self.add(self.boxMain)
         
-        print self.objTypes
-        
         # tvPermissions
         renderer2 = Gtk.CellRendererText()
         column2 = Gtk.TreeViewColumn(_("Object"), renderer2, text=1)
@@ -67,22 +65,30 @@ class NautilusWindowAddACL(Gtk.Window):
         store.append(["x", _("Execute"), False])
         self.tvPermissions.set_model(store)
         
-        objTypesStore = Gtk.ListStore(str, str)
-        objTypesStore.append(["user", _("Users")])
-        objTypesStore.append(["group", _("Groups")])
+        # objTypes
+        self.icon_user = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/img/icon-user.png', 16, 16)
+        self.icon_group = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/img/icon-group.png', 16, 16)
+        
+        objTypesStore = Gtk.ListStore(str, str, GdkPixbuf.Pixbuf)
+        objTypesStore.append(["user", _("Users"), self.icon_user])
+        objTypesStore.append(["group", _("Groups"), self.icon_group])
         self.objTypes.set_model(objTypesStore)
         
         renderer_text = Gtk.CellRendererText()
+        renderer_pixbuf = Gtk.CellRendererPixbuf()
         self.objTypes.connect("changed", self.cbObjectTypes_changed)
+        self.objTypes.pack_start(renderer_pixbuf, False)
+        self.objTypes.add_attribute(renderer_pixbuf, "pixbuf", 2)
         self.objTypes.pack_start(renderer_text, True)
         self.objTypes.add_attribute(renderer_text, "text", 1)
         self.objTypes.set_active(0)
         
+        # tvObjects
         renderer = Gtk.CellRendererText()
-        renderer_pixbuf = Gtk.CellRendererPixbuf()
+        renderer_pixbuf2 = Gtk.CellRendererPixbuf()
         column = Gtk.TreeViewColumn(_("Object"))
-        column.pack_start(renderer_pixbuf, False)
-        column.add_attribute(renderer_pixbuf, "pixbuf", 2)
+        column.pack_start(renderer_pixbuf2, False)
+        column.add_attribute(renderer_pixbuf2, "pixbuf", 2)
         column.pack_start(renderer, True)
         column.add_attribute(renderer, "text", 1)
         column.set_sort_column_id(1)
@@ -103,20 +109,17 @@ class NautilusWindowAddACL(Gtk.Window):
         type = model.get_value(combo.get_active_iter(), 0)
         self.tvObjects.set_model(None)
         
-        icon_user = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/img/icon-user.png', 16, 16)
-        icon_group = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/img/icon-group.png', 16, 16)
-        
         objStore = Gtk.ListStore(str, str, GdkPixbuf.Pixbuf)
         
         if type == "group":
             groups = grp.getgrall()
             for group in groups:
-                objStore.append([group[0], group[0], icon_group])
+                objStore.append([group[0], group[0], self.icon_group])
                 
         elif type == "user":
             users = pwd.getpwall()
             for user in users:
-                objStore.append([user[0], user[0], icon_user])
+                objStore.append([user[0], user[0], self.icon_user])
                 
         self.tvObjects.set_model(objStore)
         

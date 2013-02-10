@@ -12,7 +12,7 @@ import urllib
 
 import pwd, grp
 
-from gi.repository import Nautilus, GObject, Gtk
+from gi.repository import Nautilus, GObject, Gtk, GdkPixbuf
 from locale import gettext as _
 
 WORK_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -79,7 +79,12 @@ class NautilusWindowAddACL(Gtk.Window):
         self.objTypes.set_active(0)
         
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
+        renderer_pixbuf = Gtk.CellRendererPixbuf()
+        column = Gtk.TreeViewColumn(_("Object"))
+        column.pack_start(renderer_pixbuf, False)
+        column.add_attribute(renderer_pixbuf, "pixbuf", 2)
+        column.pack_start(renderer, True)
+        column.add_attribute(renderer, "text", 1)
         column.set_sort_column_id(1)
         self.tvObjects.append_column(column)
         
@@ -96,21 +101,22 @@ class NautilusWindowAddACL(Gtk.Window):
         # Type has changed, we have to update our list of acl objects
         model = self.objTypes.get_model()
         type = model.get_value(combo.get_active_iter(), 0)
-        print "current object: ", type
-        
         self.tvObjects.set_model(None)
         
-        objStore = Gtk.ListStore(str, str)
+        icon_user = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/img/icon-user.png', 16, 16)
+        icon_group = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/img/icon-group.png', 16, 16)
+        
+        objStore = Gtk.ListStore(str, str, GdkPixbuf.Pixbuf)
         
         if type == "group":
             groups = grp.getgrall()
             for group in groups:
-                objStore.append([group[0], group[0]])
+                objStore.append([group[0], group[0], icon_group])
                 
         elif type == "user":
             users = pwd.getpwall()
             for user in users:
-                objStore.append([user[0], user[0]])
+                objStore.append([user[0], user[0], icon_user])
                 
         self.tvObjects.set_model(objStore)
         

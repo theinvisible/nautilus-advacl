@@ -11,7 +11,7 @@ import locale
 import urllib
 import pyinotify
 
-from gi.repository import Nautilus, GObject, Gtk, GLib
+from gi.repository import Nautilus, GObject, Gtk, GLib, GdkPixbuf
 from locale import gettext as _
 
 WORK_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -98,11 +98,15 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         tvPermissions = self.builder.get_object("tvPermissions")
         tvObjects.set_model(None)
         
+        icon_user = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/nautilus-advacl/img/icon-user.png', 16, 16)
+        icon_group = GdkPixbuf.Pixbuf.new_from_file_at_size(WORK_DIR + '/nautilus-advacl/img/icon-group.png', 16, 16)
+        
         permList = self.advacllibrary.get_permissions(self.filename, self.cbxDefaultACL.get_active())
-        permStore = Gtk.ListStore(GObject.TYPE_PYOBJECT, str)
+        permStore = Gtk.ListStore(GObject.TYPE_PYOBJECT, str, GdkPixbuf.Pixbuf)
         
         for permObj in permList:
-            permStore.append([permObj, permObj.object + " (" + permObj.realm + ")"])
+            icon = icon_user if permObj.realm == "user" else icon_group
+            permStore.append([permObj, permObj.object + " (" + permObj.realm + ")", icon])
             
         tvObjects.set_model(permStore)
         self.setColumnOrder()
@@ -117,7 +121,12 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         
         # tvObjects
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn(_("Object"), renderer, text=1)
+        renderer_pixbuf = Gtk.CellRendererPixbuf()
+        column = Gtk.TreeViewColumn(_("Object"))
+        column.pack_start(renderer_pixbuf, False)
+        column.add_attribute(renderer_pixbuf, "pixbuf", 2)
+        column.pack_start(renderer, True)
+        column.add_attribute(renderer, "text", 1)
         column.set_sort_column_id(1)
         self.tvObjects.append_column(column)
         

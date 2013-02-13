@@ -1,3 +1,11 @@
+nautilus-advacl (0.7-1) precise; urgency=low
+
+  * Code & GUI cleanup
+  * Added icons to some views
+  * Language files added
+
+ -- Rene Hadler <rene@pc-rene-priv>  Sun, 10 Feb 2013 17:56:07 +0100
+
 nautilus-advacl (0.6-1) precise; urgency=low
 
   * Using polkit instead of sudo

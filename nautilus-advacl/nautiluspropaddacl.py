@@ -9,11 +9,12 @@ import os
 import sys
 import locale
 import urllib
+import gettext
+_ = gettext.gettext
 
 import pwd, grp
 
 from gi.repository import Nautilus, GObject, Gtk, GdkPixbuf
-from locale import gettext as _
 
 WORK_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(WORK_DIR + "/..")

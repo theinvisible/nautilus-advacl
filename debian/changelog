@@ -1,10 +1,16 @@
+nautilus-advacl (0.8-1) precise; urgency=low
+
+  * Package does not overwrite nautilus language anymore
+
+ -- Rene Hadler <rene@iksdeh.at>  Sun, 31 Mar 2013 14:06:07 +0100
+
 nautilus-advacl (0.7-1) precise; urgency=low
 
   * Code & GUI cleanup
   * Added icons to some views
   * Language files added
 
- -- Rene Hadler <rene@pc-rene-priv>  Sun, 10 Feb 2013 17:56:07 +0100
+ -- Rene Hadler <rene@iksdeh.at>  Sun, 10 Feb 2013 17:56:07 +0100
 
 nautilus-advacl (0.6-1) precise; urgency=low
 

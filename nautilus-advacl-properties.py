@@ -10,9 +10,10 @@ import sys
 import locale
 import urllib
 import pyinotify
+import gettext
+_ = gettext.gettext
 
 from gi.repository import Nautilus, GObject, Gtk, GLib, GdkPixbuf
-from locale import gettext as _
 
 WORK_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(WORK_DIR + "/nautilus-advacl")
@@ -31,8 +32,8 @@ class FileEvent(pyinotify.ProcessEvent):
 
 class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def __init__(self):
-        locale.bindtextdomain('nautilusadvacl', WORK_DIR + '/nautilus-advacl/locale/')
-        locale.textdomain('nautilusadvacl')
+        #gettext.bindtextdomain('nautilusadvacl', WORK_DIR + '/nautilus-advacl/locale/')
+        gettext.textdomain('nautilusadvacl')
         self.advacllibrary = advacllib.AdvACLLibrary()
     
     def init_fileeventhandler(self):
@@ -81,6 +82,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
         self.property_label.show()   
         
         self.builder = Gtk.Builder()
+        self.builder.set_translation_domain('nautilusadvacl')
         self.builder.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop.glade", ["boxMain"])
         self.bbox = self.builder.get_object("boxMain")
         self.bbox.show()
@@ -239,6 +241,7 @@ class AdvACLExtension(GObject.GObject, Nautilus.PropertyPageProvider):
     def btnObjAdd_clicked(self, button):
         # Yeah, we need to load the glade file everytime coz else it will only show up the first time
         self.builder_add_acl = Gtk.Builder()
+        self.builder_add_acl.set_translation_domain('nautilusadvacl')
         self.builder_add_acl.add_objects_from_file(WORK_DIR + "/nautilus-advacl/nautilus-prop-add-acl.glade", ["boxMain"])
         self.win_add_acl = NautilusWindowAddACL(self)
         self.win_add_acl.show()

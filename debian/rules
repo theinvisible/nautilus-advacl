@@ -5,8 +5,14 @@
 
 override_dh_auto_install:
 	mkdir -p debian/nautilus-advacl/usr/share/nautilus-python/extensions
+	mkdir -p debian/nautilus-advacl/usr/share/locale/de/LC_MESSAGES
+	mkdir -p debian/nautilus-advacl/usr/share/locale/en/LC_MESSAGES
 	cp -a nautilus-advacl-properties.py debian/nautilus-advacl/usr/share/nautilus-python/extensions/.
 	cp -a nautilus-advacl debian/nautilus-advacl/usr/share/nautilus-python/extensions/.
+	cp nautilus-advacl/locale/de/LC_MESSAGES/nautilusadvacl.mo debian/nautilus-advacl/usr/share/locale/de/LC_MESSAGES/.
+	cp nautilus-advacl/locale/en/LC_MESSAGES/nautilusadvacl.mo debian/nautilus-advacl/usr/share/locale/en/LC_MESSAGES/.
+	rm -rf debian/nautilus-advacl/usr/share/nautilus-python/.git || true
 	rm debian/nautilus-advacl/usr/share/nautilus-python/extensions/*.pyc || true
 	rm debian/nautilus-advacl/usr/share/nautilus-python/extensions/nautilus-advacl/*.pyc || true
+	rm -rf debian/nautilus-advacl/usr/share/nautilus-python/extensions/nautilus-advacl/locale || true
 	rm debian/nautilus-advacl/usr/share/nautilus-python/extensions/nautilus-advacl/locale/scripts.txt || true 

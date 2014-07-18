@@ -1,3 +1,9 @@
+nautilus-advacl (0.8-2) precise; urgency=low
+
+  * Added dependency for python-pyinotify
+
+ -- Rene Hadler <rene@iksdeh.at>  Fri, 18 Jul 2014 10:06:07 +0100
+
 nautilus-advacl (0.8-1) precise; urgency=low
 
   * Package does not overwrite nautilus language anymore
